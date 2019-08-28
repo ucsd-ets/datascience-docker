@@ -1,4 +1,8 @@
 ARG BASE_CONTAINER=jupyter/datascience-notebook:a95cb64dfe10
+ARG DATAHUB_CONTAINER=ucsdets/datahub-base-notebook:2019.4.1-fa19
+
+FROM $DATAHUB_CONTAINER as datahub
+
 FROM $BASE_CONTAINER
 
 MAINTAINER UC San Diego ITS/ETS-EdTech-Ecosystems <acms-compinf@ucsd.edu>
@@ -6,15 +10,10 @@ USER root
 
 RUN pip install datascience
 
-RUN apt-get update && apt-get -qq install -y \
-        curl \
-        rsync \
-        unzip \
-        less \
-        nano \
-        vim \
-        openssh-client \
-        wget
+USER root
+
+COPY --from=datahub /usr/share/datahub/scripts/* /usr/share/datahub/scripts/
+RUN /usr/share/datahub/scripts/install-utilities.sh
 
 # Install OKpy for DSC courses
 RUN pip install okpy
@@ -45,7 +44,7 @@ RUN conda install --quiet --yes \
 # Pregenerate matplotlib cache
 RUN python -c 'import matplotlib.pyplot'
 
-RUN conda remove --quiet --yes --force qt pyqt
+#RUN conda remove --quiet --yes --force qt pyqt
 RUN conda clean -tipsy
 RUN conda install nbgrader
 
@@ -58,17 +57,12 @@ RUN jupyter nbextension disable --sys-prefix formgrader/main --section=tree
 RUN jupyter serverextension disable --sys-prefix nbgrader.server_extensions.formgrader
 RUN jupyter nbextension disable --sys-prefix create_assignment/main
 
-RUN pip install ipywidgets
-RUN jupyter nbextension enable --sys-prefix --py widgetsnbextension
-
 RUN pip install git+https://github.com/data-8/gitautosync
 
 RUN jupyter serverextension enable --py nbgitpuller --sys-prefix
 
-RUN pip install git+https://github.com/data-8/nbresuse.git
-RUN jupyter serverextension enable --sys-prefix --py nbresuse
-RUN jupyter nbextension install --sys-prefix --py nbresuse
-RUN jupyter nbextension enable --sys-prefix --py nbresuse
+RUN /usr/share/datahub/scripts/install-ipywidgets.sh && \
+  /usr/share/datahub/scripts/install-nbresuse.sh
 
 WORKDIR /home
 RUN userdel jovyan && rm -rf /home/jovyan
