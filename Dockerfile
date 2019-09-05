@@ -46,7 +46,7 @@ RUN python -c 'import matplotlib.pyplot'
 
 #RUN conda remove --quiet --yes --force qt pyqt
 RUN conda clean -tipsy
-RUN conda install nbgrader
+RUN conda install nbgrader=0.6.0
 
 RUN jupyter nbextension install --symlink --sys-prefix --py nbgrader
 RUN jupyter nbextension enable --sys-prefix --py nbgrader
