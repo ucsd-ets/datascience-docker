@@ -1,5 +1,5 @@
 ARG BASE_CONTAINER=jupyter/datascience-notebook:a95cb64dfe10
-ARG DATAHUB_CONTAINER=ucsdets/datahub-base-notebook:2019.4.1-fa19
+ARG DATAHUB_CONTAINER=ucsdets/datahub-base-notebook:2019.4.2
 
 FROM $DATAHUB_CONTAINER as datahub
 
@@ -46,16 +46,8 @@ RUN python -c 'import matplotlib.pyplot'
 
 #RUN conda remove --quiet --yes --force qt pyqt
 RUN conda clean -tipsy
-RUN conda install nbgrader=0.6.0
 
-RUN jupyter nbextension install --symlink --sys-prefix --py nbgrader
-RUN jupyter nbextension enable --sys-prefix --py nbgrader
-RUN jupyter serverextension enable --sys-prefix --py nbgrader
-
-# Disable formgrader for default case, re-enable if instructor
-RUN jupyter nbextension disable --sys-prefix formgrader/main --section=tree
-RUN jupyter serverextension disable --sys-prefix nbgrader.server_extensions.formgrader
-RUN jupyter nbextension disable --sys-prefix create_assignment/main
+RUN /usr/share/datahub/scripts/install-nbgrader.sh
 
 RUN pip install git+https://github.com/data-8/gitautosync
 
