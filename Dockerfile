@@ -1,5 +1,5 @@
 ARG BASE_CONTAINER=jupyter/datascience-notebook:a95cb64dfe10
-ARG DATAHUB_CONTAINER=ucsdets/datahub-base-notebook:2019.4.4
+ARG DATAHUB_CONTAINER=ucsdets/datahub-base-notebook:2019.4.5
 
 FROM $DATAHUB_CONTAINER as datahub
 
@@ -47,13 +47,9 @@ RUN python -c 'import matplotlib.pyplot'
 #RUN conda remove --quiet --yes --force qt pyqt
 RUN conda clean -tipsy
 
-RUN /usr/share/datahub/scripts/install-nbgrader.sh
-
-RUN pip install git+https://github.com/data-8/gitautosync
-
-RUN jupyter serverextension enable --py nbgitpuller --sys-prefix
-
-RUN /usr/share/datahub/scripts/install-ipywidgets.sh && \
+RUN /usr/share/datahub/scripts/install-nbgrader.sh &&
+  /usr/share/datahub/scripts/install-nbgitpuller.sh &&
+  /usr/share/datahub/scripts/install-ipywidgets.sh &&
   /usr/share/datahub/scripts/install-nbresuse.sh
 
 WORKDIR /home
