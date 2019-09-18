@@ -47,9 +47,9 @@ RUN python -c 'import matplotlib.pyplot'
 #RUN conda remove --quiet --yes --force qt pyqt
 RUN conda clean -tipsy
 
-RUN /usr/share/datahub/scripts/install-nbgrader.sh &&
-  /usr/share/datahub/scripts/install-nbgitpuller.sh &&
-  /usr/share/datahub/scripts/install-ipywidgets.sh &&
+RUN /usr/share/datahub/scripts/install-nbgrader.sh && \
+  /usr/share/datahub/scripts/install-nbgitpuller.sh && \
+  /usr/share/datahub/scripts/install-ipywidgets.sh && \
   /usr/share/datahub/scripts/install-nbresuse.sh
 
 WORKDIR /home
