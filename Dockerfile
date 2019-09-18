@@ -13,7 +13,7 @@ RUN pip install datascience
 USER root
 
 COPY --from=datahub /usr/share/datahub/scripts/* /usr/share/datahub/scripts/
-RUN /usr/share/datahub/scripts/install-utilities.sh
+RUN /usr/share/datahub/scripts/install-all.sh
 
 # Install OKpy for DSC courses
 RUN pip install okpy
@@ -46,11 +46,6 @@ RUN python -c 'import matplotlib.pyplot'
 
 #RUN conda remove --quiet --yes --force qt pyqt
 RUN conda clean -tipsy
-
-RUN /usr/share/datahub/scripts/install-nbgrader.sh && \
-  /usr/share/datahub/scripts/install-nbgitpuller.sh && \
-  /usr/share/datahub/scripts/install-ipywidgets.sh && \
-  /usr/share/datahub/scripts/install-nbresuse.sh
 
 WORKDIR /home
 RUN userdel jovyan && rm -rf /home/jovyan
