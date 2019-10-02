@@ -1,5 +1,5 @@
 ARG BASE_CONTAINER=jupyter/datascience-notebook:a95cb64dfe10
-ARG DATAHUB_CONTAINER=ucsdets/datahub-base-notebook:2019.4.8
+ARG DATAHUB_CONTAINER=ucsdets/datahub-base-notebook:2019.4.9
 
 FROM $DATAHUB_CONTAINER as datahub
 
