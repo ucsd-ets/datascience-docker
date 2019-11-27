@@ -1,6 +1,6 @@
 ARG BASE_CONTAINER=jupyter/datascience-notebook:a95cb64dfe10
 ARG DATAHUB_CONTAINER=ucsdets/datahub-base-notebook:nblogger
-
+# force rebuild
 FROM $DATAHUB_CONTAINER as datahub
 
 FROM $BASE_CONTAINER
