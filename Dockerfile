@@ -1,53 +1,50 @@
-ARG BASE_CONTAINER=jupyter/datascience-notebook:a95cb64dfe10
-ARG DATAHUB_CONTAINER=ucsdets/datahub-base-notebook:nblogger
-# force rebuild
-FROM $DATAHUB_CONTAINER as datahub
+ARG BASE_CONTAINER=jupyter/datascience-notebook:hub-1.1.0
+ARG DATAHUB_CONTAINER=ucsdets/datahub-base-notebook:2020.2-stable
 
+# # force rebuild
+FROM $DATAHUB_CONTAINER as datahub
 FROM $BASE_CONTAINER
 
 MAINTAINER UC San Diego ITS/ETS-EdTech-Ecosystems <acms-compinf@ucsd.edu>
-USER root
-
-RUN pip install datascience
-
-USER root
 
 COPY --from=datahub /usr/share/datahub/scripts/* /usr/share/datahub/scripts/
+COPY --from=datahub /usr/share/datahub/tests /usr/share/datahub/tests
 RUN /usr/share/datahub/scripts/install-all.sh
 
 # Install OKpy for DSC courses
-RUN pip install okpy
-RUN pip install dpkt
+# downgrade pip temporarily and upgrade to fix issue with okpy install
+RUN pip install --upgrade --force-reinstall pip==9.0.3
+RUN pip install okpy --disable-pip-version-check
+RUN pip install --upgrade pip
 
-RUN conda install --quiet --yes \
-            bokeh \
-            cloudpickle \
-            cython \
-            dill \
-            h5py \
-            hdf5 \
-            nose \
-            numba \
-            numexpr \
-            patsy \
-            scikit-image \
-            scikit-learn \
-            seaborn \
-            sqlalchemy \
-            sympy
+RUN pip install dpkt \
+                nose \
+                datascience
 
 # Pregenerate matplotlib cache
 RUN python -c 'import matplotlib.pyplot'
 
-#RUN conda remove --quiet --yes --force qt pyqt
 RUN conda clean -tipsy
 
-WORKDIR /home
-RUN userdel jovyan && rm -rf /home/jovyan
-ENV SHELL=/bin/bash
+# Run container integration tests
+RUN id
+USER root
+ENV TESTDIR=/usr/share/datahub/tests
 
-COPY start-systemuser.sh /usr/local/bin/start-systemuser.sh
+ARG DATASCIENCE_TESTDIR=${TESTDIR}/datascience-notebook
+COPY tests ${DATASCIENCE_TESTDIR}
+RUN chmod -R +x ${TESTDIR}
+RUN bash ${TESTDIR}/**/*.sh
 
+# change the owner back
+RUN chown -R 1000:1000 /home/jovyan
+USER $NB_UID
 RUN  bash -c 'find /opt/julia -type f -a -name "*.ji" -a \! -perm /005 | xargs chmod og+rX'
+ENV SHELL=/bin/bash
+# # RUN userdel jovyan && rm -rf /home/jovyan
 
-CMD ["sh" "/usr/local/bin/start-systemuser.sh"]
+# COPY start-systemuser.sh /usr/local/bin/start-systemuser.sh
+# RUN /bin/bash /usr/local/bin/start-systemuser.sh
+
+# CMD /bin/bash /usr/local/bin/start-systemuser.sh
+# 
