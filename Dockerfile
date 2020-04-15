@@ -41,10 +41,9 @@ RUN chown -R 1000:1000 /home/jovyan
 USER $NB_UID
 RUN  bash -c 'find /opt/julia -type f -a -name "*.ji" -a \! -perm /005 | xargs chmod og+rX'
 ENV SHELL=/bin/bash
-# # RUN userdel jovyan && rm -rf /home/jovyan
 
+COPY --from=datahub /run_jupyter.sh /
+# # RUN userdel jovyan && rm -rf /home/jovyan
 # COPY start-systemuser.sh /usr/local/bin/start-systemuser.sh
 # RUN /bin/bash /usr/local/bin/start-systemuser.sh
-
 # CMD /bin/bash /usr/local/bin/start-systemuser.sh
-# 
