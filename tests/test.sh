@@ -2,7 +2,10 @@
 
 DATASCIENCE_TESTDIR=$TESTDIR/datascience-notebook
 jupyter nbconvert --to python "${DATASCIENCE_TESTDIR}/datascience_notebook.ipynb"
-python3 $DATASCIENCE_TESTDIR/datascience_notebook.py
+
+if ! python3 $DATASCIENCE_TESTDIR/datascience_notebook.py; then
+    exit 1
+fi
 
 # test protobuf
 protoc -I=$DATASCIENCE_TESTDIR --python_out=$DATASCIENCE_TESTDIR $DATASCIENCE_TESTDIR/addressbook.proto

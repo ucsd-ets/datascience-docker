@@ -27,14 +27,12 @@ RUN python -c 'import matplotlib.pyplot'
 RUN conda clean -tipsy
 
 # Run container integration tests
-RUN id
 USER root
 ENV TESTDIR=/usr/share/datahub/tests
-
 ARG DATASCIENCE_TESTDIR=${TESTDIR}/datascience-notebook
 COPY tests ${DATASCIENCE_TESTDIR}
 RUN chmod -R +x ${TESTDIR}
-RUN bash ${TESTDIR}/**/*.sh
+RUN for f in ${TESTDIR}/**/*.sh; do bash $f; done
 
 # change the owner back
 RUN chown -R 1000:1000 /home/jovyan
@@ -43,7 +41,3 @@ RUN  bash -c 'find /opt/julia -type f -a -name "*.ji" -a \! -perm /005 | xargs c
 ENV SHELL=/bin/bash
 
 COPY --from=datahub /run_jupyter.sh /
-# # RUN userdel jovyan && rm -rf /home/jovyan
-# COPY start-systemuser.sh /usr/local/bin/start-systemuser.sh
-# RUN /bin/bash /usr/local/bin/start-systemuser.sh
-# CMD /bin/bash /usr/local/bin/start-systemuser.sh
