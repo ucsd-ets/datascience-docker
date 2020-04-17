@@ -1,17 +1,16 @@
 #!/bin/bash
 
 DATASCIENCE_TESTDIR=$TESTDIR/datascience-notebook
-jupyter nbconvert --to python "${DATASCIENCE_TESTDIR}/datascience_notebook.ipynb"
-
-if ! python3 $DATASCIENCE_TESTDIR/datascience_notebook.py; then
+if ! jupyter nbconvert --execute "${DATASCIENCE_TESTDIR}/datascience_notebook.ipynb"; then
+    echo "Integration test failed"
+    echo "could not execute datascience_notebook"
     exit 1
 fi
 
-# test protobuf
-protoc -I=$DATASCIENCE_TESTDIR --python_out=$DATASCIENCE_TESTDIR $DATASCIENCE_TESTDIR/addressbook.proto
-python3 $DATASCIENCE_TESTDIR/addressbook_pb2.py
+if ! test -f "${DATASCIENCE_TESTDIR}/datascience_notebook.html"; then
+    echo "Integration test failed"
+    echo "Compiled datascience_notebook.html does not exist"
+    exit 1
+fi
 
-# test okpy
-git clone https://github.com/okpy/ok-client.git
-ok -q ok-client/demo/ok_test/q2
-rm -rf ok-client
+echo "datascience-notebook integration test passed!"

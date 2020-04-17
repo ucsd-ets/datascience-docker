@@ -1,0 +1,4 @@
+sut:
+    build: .
+    command: /usr/share/datahub/tests/datascience-notebook/test.sh
+    user: root
