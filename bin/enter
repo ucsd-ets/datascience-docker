@@ -1,0 +1,3 @@
+#!/bin/bash
+
+docker run -ti ucsdets/datascience-notebook /bin/bash

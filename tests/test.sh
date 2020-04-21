@@ -14,3 +14,4 @@ if ! test -f "${DATASCIENCE_TESTDIR}/datascience_notebook.html"; then
 fi
 
 echo "datascience-notebook integration test passed!"
+# jupyter notebook --NotebookApp.token='' --allow-root
