@@ -1,5 +1,5 @@
 # ARG BASE_CONTAINER=jupyter/datascience-notebook:hub-1.1.0
-ARG DATAHUB_CONTAINER=ucsdets/datahub-base-notebook-test:2020.2-stable
+ARG DATAHUB_CONTAINER=ucsdets/datahub-base-notebook:2020.2-stable
 
 # # force rebuild
 FROM $DATAHUB_CONTAINER as datahub
