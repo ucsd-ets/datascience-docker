@@ -3,7 +3,6 @@ ARG DATAHUB_CONTAINER=ucsdets/datahub-base-notebook:2020.2-stable
 
 # # force rebuild
 FROM $DATAHUB_CONTAINER as datahub
-# FROM $BASE_CONTAINER
 
 MAINTAINER UC San Diego ITS/ETS-EdTech-Ecosystems <acms-compinf@ucsd.edu>
 
