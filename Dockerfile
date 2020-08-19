@@ -31,5 +31,4 @@ RUN chown 1000:1000 ${DATASCIENCE_TESTDIR}
 # change the owner back
 RUN chown -R 1000:1000 /home/jovyan
 USER $NB_UID
-RUN  bash -c 'find /opt/julia -type f -a -name "*.ji" -a \! -perm /005 | xargs chmod og+rX'
 ENV SHELL=/bin/bash
