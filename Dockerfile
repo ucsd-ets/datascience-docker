@@ -1,9 +1,4 @@
-ARG DATAHUB_CONTAINER=ucsdets/datahub-base-notebook:dev
-
-# # force rebuild
-FROM $DATAHUB_CONTAINER as datahub
-
-MAINTAINER UC San Diego ITS/ETS-EdTech-Ecosystems <acms-compinf@ucsd.edu>
+FROM $ucsdets/datahub-base-notebook
 
 # Install OKpy for DSC courses
 # downgrade pip temporarily and upgrade to fix issue with okpy install
@@ -17,16 +12,15 @@ RUN pip install dpkt \
                 datascience
 
 # Pregenerate matplotlib cache
-RUN python -c 'import matplotlib.pyplot'
-
-RUN conda clean -tipsy
+RUN python -c 'import matplotlib.pyplot' && \
+    conda clean -tipsy
 
 # import integration tests
 ENV TESTDIR=/usr/share/datahub/tests
 ARG DATASCIENCE_TESTDIR=${TESTDIR}/datascience-notebook
 COPY tests ${DATASCIENCE_TESTDIR}
-RUN chmod -R +rwx ${DATASCIENCE_TESTDIR}
-RUN chown 1000:1000 ${DATASCIENCE_TESTDIR}
+RUN chmod -R +rwx ${DATASCIENCE_TESTDIR} && \
+    chown 1000:1000 ${DATASCIENCE_TESTDIR}
 
 # change the owner back
 RUN chown -R 1000:1000 /home/jovyan
