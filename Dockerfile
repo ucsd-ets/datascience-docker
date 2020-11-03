@@ -1,4 +1,4 @@
-FROM $ucsdets/datahub-base-notebook
+FROM ucsdets/datahub-base-notebook:dev
 
 # Install OKpy for DSC courses
 # downgrade pip temporarily and upgrade to fix issue with okpy install
