@@ -1,4 +1,4 @@
-ARG DATAHUB_CONTAINER=ucsdets/datahub-base-notebook:2020.2-stable
+ARG DATAHUB_CONTAINER=ucsdets/datahub-base-notebook:dev
 
 # # force rebuild
 FROM $DATAHUB_CONTAINER as datahub
