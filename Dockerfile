@@ -1,9 +1,6 @@
-ARG DATAHUB_CONTAINER=ucsdets/datahub-base-notebook:2020.2-stable
+FROM ucsdets/datahub-base-notebook:2021.1-stable
 
-# # force rebuild
-FROM $DATAHUB_CONTAINER as datahub
-
-MAINTAINER UC San Diego ITS/ETS-EdTech-Ecosystems <acms-compinf@ucsd.edu>
+LABEL MAINTAINER="UC San Diego ITS/ETS-EdTech-Ecosystems <acms-compinf@ucsd.edu>"
 
 # Install OKpy for DSC courses
 # downgrade pip temporarily and upgrade to fix issue with okpy install
