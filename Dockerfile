@@ -12,7 +12,7 @@ RUN pip install --upgrade pip
 RUN pip install dpkt \
                 nose \
                 datascience
-RUN apt update && apt install -y libxcb-icccm4
+RUN apt update && apt install -y libxcb-icccm4 libxcb-image0 libxcb-keysyms1 libxcb-randr0 libxcb-render-util0 libxcb-xinerama0 libxcb-xkb1 libxkbcommon-x11-0
 RUN pip install vtk PyQt5
 
 # Pregenerate matplotlib cache
